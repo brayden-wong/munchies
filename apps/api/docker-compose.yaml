@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    networks:
+      - munchies-network
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: munchies
+    ports:
+      - 5432:5432
+    volumes:
+      - munchies:/var/lib/postgresql/data
+
+  dev:
+    build:
+      context: .
+      target: development
+      dockerfile: ./dockerfile
+    ports:
+      - 8080:8080
+    command: sh -c "./dev.sh"
+    networks:
+      - munchies-network
+    env_file: .env.docker
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+
+  # prod:
+  #   build:
+  #     context: .
+  #     target: production
+  #     dockerfile: ./dockerfile
+  #   command: sh -c "./prod.sh"
+  #   networks:
+  #     - munchies-network
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   env_file: .env.production
+  #   restart: unless-stopped
+
+networks:
+  munchies-network:
+    external: false
+
+volumes:
+  munchies:
+    external: false

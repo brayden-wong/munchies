@@ -1,0 +1,8 @@
+{
+  "name": "@munchies/types",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "devDependencies": {
+    "typescript": "5.1.6"
+  }
+}
